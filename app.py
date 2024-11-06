@@ -29,7 +29,7 @@ model = genai.GenerativeModel(
         "fast, and user-friendly responses using the Gemini API. Aim to help users strengthen their legal knowledge "
         "by offering relevant case law examples and practical applications. Also provide some real example cases "
         "related to the questions asked remember that strictly no other topics if I ask you other out of the topic "
-        "Other domain questions do not respond."
+        "questions do not respond."
     ),
 )
 
@@ -42,8 +42,8 @@ st.write("Welcome! Ask any question related to criminal law and view the convers
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# Input box for user query
-user_input = st.text_input("Your Question:", placeholder="Type your question here...")
+# Input box for user query with session state
+user_input = st.text_input("Your Question:", placeholder="Type your question here...", key="user_input")
 
 # Display conversation history
 st.subheader("Conversation History")
@@ -68,7 +68,7 @@ if st.button("Submit"):
         st.session_state.history.append((user_input, response.text))
 
         # Clear user input after submission
-        st.experimental_rerun()  # This will refresh the app and show updated history
+        st.session_state.user_input = ""  # This resets the input field
     else:
         st.warning("Please enter a question before submitting.")
 
