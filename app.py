@@ -42,6 +42,10 @@ st.write("Welcome! Ask any question related to criminal law and view the convers
 if "history" not in st.session_state:
     st.session_state.history = []
 
+# Define a callback function to clear user input
+def clear_input():
+    st.session_state.user_input = ""
+
 # Input box for user query with session state
 user_input = st.text_input("Your Question:", placeholder="Type your question here...", key="user_input")
 
@@ -53,8 +57,8 @@ if st.session_state.history:
         st.markdown(f"**Assistant**: {answer}")
         st.markdown("---")
 
-# Submit button interaction
-if st.button("Submit"):
+# Submit button interaction with a callback to clear input
+if st.button("Submit", on_click=clear_input):
     if user_input:
         # Start a chat session
         chat_session = model.start_chat(history=[])
@@ -66,9 +70,6 @@ if st.button("Submit"):
 
         # Save to conversation history
         st.session_state.history.append((user_input, response.text))
-
-        # Clear user input after submission
-        st.session_state.user_input = ""  # This resets the input field
     else:
         st.warning("Please enter a question before submitting.")
 
